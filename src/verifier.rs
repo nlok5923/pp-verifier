@@ -14,7 +14,7 @@ sol! {
         G2Point beta2;
         G2Point gamma2;
         G2Point delta2;
-        G1Point[7] IC;
+        G1Point[2] IC;
     }
 
     struct Proof {
@@ -27,9 +27,9 @@ sol! {
 #[external]
 impl Verifier {
     #[allow(non_snake_case)]
-    pub fn verifyProof(words: [U256; 14]) -> Result<bool, Vec<u8>> {
+    pub fn verifyProof(words: [U256; 9]) -> Result<bool, Vec<u8>> {
         let proof: [U256; 8] = words[0..8].try_into().unwrap();
-        let input: [U256; 6] = words[8..14].try_into().unwrap();
+        let input: [U256; 1] = vec![words[8]].try_into().unwrap();
 
         let mut i = 0;
         while i < 8 {
@@ -63,7 +63,7 @@ impl Verifier {
         let mut vk_x = Groth16::plus(&vk_x, &verifying_key.IC[0])?;
 
         #[allow(clippy::needless_range_loop)]
-        for z in 0..6 {
+        for z in 0..1 {
             if input[z] >= Constants.SNARK_SCALAR_FIELD() {
                 return Err("sunade".into());
             }
